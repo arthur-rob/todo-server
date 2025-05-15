@@ -3,14 +3,19 @@ import {
     ExecutionContext,
     Injectable,
     UnauthorizedException,
+    NotFoundException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { jwtConstants } from './constants';
 import { Request } from 'express';
-import { User } from '../users/entities/user.entity';
+import { UsersService } from '../users/users.service';
+
 @Injectable()
 export class AuthGuard implements CanActivate {
-    constructor(private jwtService: JwtService) {}
+    constructor(
+        private jwtService: JwtService,
+        private usersService: UsersService,
+    ) {}
 
     async canActivate(context: ExecutionContext): Promise<boolean> {
         const request: Request = context.switchToHttp().getRequest();
@@ -19,10 +24,15 @@ export class AuthGuard implements CanActivate {
             throw new UnauthorizedException();
         }
         try {
-            const payload: User = await this.jwtService.verifyAsync(token, {
-                secret: jwtConstants.secret,
-            });
-            request['user'] = payload;
+            const payload: { email: string } =
+                await this.jwtService.verifyAsync(token, {
+                    secret: jwtConstants.secret,
+                });
+            const user = await this.usersService.findOne(payload?.email);
+            if (!user) throw new NotFoundException();
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            const { password, ...userWithoutPassword } = user;
+            request['user'] = userWithoutPassword;
         } catch {
             throw new UnauthorizedException();
         }

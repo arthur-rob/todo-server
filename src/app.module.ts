@@ -6,6 +6,7 @@ import { User } from './users/entities/user.entity';
 import { UsersModule } from './users/users.module';
 import { LoggerMiddleware } from './common/logger.middleware';
 import { AuthModule } from './auth/auth.module';
+import { TaskModule } from './task/task.module';
 
 @Module({
     imports: [
@@ -21,6 +22,7 @@ import { AuthModule } from './auth/auth.module';
         }),
         UsersModule,
         AuthModule,
+        TaskModule,
     ],
     controllers: [AppController],
     providers: [AppService],

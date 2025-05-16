@@ -31,6 +31,12 @@ export class TaskController {
     }
 
     @UseGuards(AuthGuard)
+    @Get('list/:listId')
+    async findByList(@Param('listId') listId: number): Promise<Task[]> {
+        return await this.taskService.findByList(listId);
+    }
+
+    @UseGuards(AuthGuard)
     @HttpCode(HttpStatus.OK)
     @Post()
     async create(

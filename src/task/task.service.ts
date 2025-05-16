@@ -33,6 +33,15 @@ export class TaskService {
         return await this.taskRepository.findOne({ where: { id } });
     }
 
+    async findByList(listId: number): Promise<Task[]> {
+        return await this.taskRepository.find({
+            where: {
+                list: { id: listId },
+            },
+            relations: ['list'],
+        });
+    }
+
     async update(
         id: number,
         updateTaskDto: UpdateTaskDto,

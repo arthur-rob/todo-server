@@ -27,8 +27,10 @@ export class ListService {
         return await this.listRepository.save({ ...createListDto, user });
     }
 
-    async findByUser(user: User): Promise<List[]> {
-        return await this.listRepository.find({ where: { user } });
+    async findByUser(user: { id: number }): Promise<List[]> {
+        return await this.listRepository.find({
+            where: { user: { id: user.id } },
+        });
     }
 
     async findOne(id: number): Promise<List | null> {

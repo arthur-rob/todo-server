@@ -1,5 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
+import { List } from 'src/list/entities/list.entity';
 
 @Entity()
 export class Task {
@@ -23,4 +24,10 @@ export class Task {
 
     @ManyToOne(() => User, { eager: true, nullable: false })
     user: User;
+
+    @ManyToOne(() => List, (list) => list.tasks, {
+        nullable: true,
+        onDelete: 'CASCADE',
+    })
+    list: List;
 }

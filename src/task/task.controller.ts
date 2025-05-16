@@ -1,6 +1,7 @@
 import {
     Body,
     Controller,
+    Delete,
     Get,
     Request,
     Patch,
@@ -50,5 +51,16 @@ export class TaskController {
     ): Promise<Task | null> {
         const user = req.user;
         return await this.taskService.update(id, updateTaskDto, user);
+    }
+
+    @UseGuards(AuthGuard)
+    @HttpCode(HttpStatus.OK)
+    @Delete(':id')
+    async delete(
+        @Param('id') id: number,
+        @Request() req: Request & { user: User },
+    ): Promise<void> {
+        const user = req.user;
+        return await this.taskService.remove(id, user);
     }
 }

@@ -53,7 +53,16 @@ export class TaskService {
         return await this.taskRepository.save(updatedTask);
     }
 
-    async remove(id: number): Promise<void> {
+    async remove(id: number, user: User): Promise<void> {
+        const task = await this.taskRepository.findOne({ where: { id } });
+        if (!task) {
+            throw new NotFoundException(`Task with ID ${id} not found`);
+        }
+        if (task.user.id !== user.id) {
+            throw new ForbiddenException(
+                'You do not have permission to update this task',
+            );
+        }
         await this.taskRepository.delete(id);
     }
 }

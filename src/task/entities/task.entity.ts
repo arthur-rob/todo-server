@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, CreateDateColumn } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
 import { List } from 'src/list/entities/list.entity';
 
@@ -21,6 +21,9 @@ export class Task {
 
     @Column({ type: 'timestamp', nullable: true })
     expireAt: Date;
+
+    @CreateDateColumn({ type: 'timestamp' })
+    createdAt: Date;
 
     @ManyToOne(() => User, { eager: true, nullable: false })
     user: User;

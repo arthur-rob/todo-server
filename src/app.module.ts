@@ -17,7 +17,7 @@ import { ListModule } from './list/list.module';
             type: 'mysql',
             host: 'localhost',
             port: 3306,
-            username: process.env.DB_USER_PASSWORD || 'root',
+            username: process.env.DB_USER_NAME || 'root',
             password: process.env.DB_USER_PASSWORD || '',
             database: process.env.DB_NAME || 'todo',
             entities: [User, Task, List],
